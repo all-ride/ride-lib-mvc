@@ -7,7 +7,7 @@ use pallo\library\mvc\exception\MvcException;
 use pallo\library\mvc\Request;
 use pallo\library\mvc\Response;
 use pallo\library\reflection\Callback;
-use pallo\library\reflection\ReflectionHelper;
+use pallo\library\reflection\Invoker;
 use pallo\library\router\Route;
 
 use \Exception;
@@ -18,67 +18,46 @@ use \ReflectionParameter;
  */
 class GenericDispatcher implements Dispatcher {
 
-	/**
-	 * Helper for reflection
-	 * @var ReflectionHelper
-	 */
-	protected $reflectionHelper;
+    /**
+     * Instance of the invoker
+     * @var pallo\library\reflection\Invoker;
+     */
+    protected $invoker;
 
-	/**
-	 * Flag to see if the callback implements the controller interface
-	 * @var boolean
-	 */
-	protected $isController;
+    /**
+     * Flag to see if the callback implements the controller interface
+     * @var boolean
+     */
+    protected $isController;
 
-	/**
-	 * Request for the dispatch
-	 * @var pallo\library\mvc\Request
-	 */
-	protected $request;
+    /**
+     * Request for the dispatch
+     * @var pallo\library\mvc\Request
+     */
+    protected $request;
 
-	/**
-	 * Response of the dispatch
-	 * @var pallo\library\mvc\Response
-	 */
-	protected $response;
+    /**
+     * Response of the dispatch
+     * @var pallo\library\mvc\Response
+     */
+    protected $response;
 
-	/**
-	 * Route from the request
-	 * @var pallo\library\router\Route
-	 */
-	protected $route;
+    /**
+     * Route from the request
+     * @var pallo\library\router\Route
+     */
+    protected $route;
 
-	/**
-	 * Constructs a new dispatcher
-	 * @return null
-	 */
-	public function __construct() {
-		$this->reflectionHelper = null;
-		$this->request = null;
-		$this->response = null;
-		$this->route = null;
-	}
-
-	/**
-	 * Sets the reflection helper
-	 * @param ReflectionHelper $reflectionHelper
-	 * @return null
-	 */
-	public function setReflectionHelper(ReflectionHelper $reflectionHelper = null) {
-		$this->reflectionHelper = $reflectionHelper;
-	}
-
-	/**
-	 * Gets the reflection helper
-	 * @return ReflectionHelper
-	 */
-	public function getReflectionHelper() {
-		if (!$this->reflectionHelper) {
-			$this->reflectionHelper = new ReflectionHelper();
-		}
-
-		return $this->reflectionHelper;
-	}
+    /**
+     * Constructs a new dispatcher
+     * @return null
+     */
+    public function __construct(Invoker $invoker) {
+        $this->invoker = $invoker;
+        $this->request = null;
+        $this->response = null;
+        $this->route = null;
+    }
 
     /**
      * Dispatches a request to the action of a controller
@@ -89,16 +68,15 @@ class GenericDispatcher implements Dispatcher {
      */
     public function dispatch(Request $request, Response $response) {
         $this->isController = false;
-    	$this->request = $request;
-    	$this->response = $response;
-		$this->route = $request->getRoute();
+        $this->request = $request;
+        $this->response = $response;
+        $this->route = $request->getRoute();
         $this->callback = $this->getCallback();
         $this->arguments = $this->getArguments();
 
         $this->prepareCallback();
-        $this->preInvokeCallback();
+
         $returnValue = $this->invokeCallback();
-        $this->postInvokeCallback();
 
         $this->arguments = null;
         $this->callback = null;
@@ -117,10 +95,13 @@ class GenericDispatcher implements Dispatcher {
      * the route is invalid
      */
     protected function getCallback() {
-    	$callback = $this->route->getCallback();
+        $callback = $this->route->getCallback();
 
         try {
             $callback = new Callback($callback);
+
+            $callback = $this->processCallback($callback);
+
             if (!$callback->isCallable()) {
                 throw new MvcException('Could not dispatch action of route ' . $this->route->getId() . ': callback is not callable');
             }
@@ -132,69 +113,32 @@ class GenericDispatcher implements Dispatcher {
     }
 
     /**
+     * Processes the callback
+     * @param Callback $callback Callback to process
+     * @return Callback Processed callback
+     */
+    protected function processCallback(Callback $callback) {
+        return $callback;
+    }
+
+    /**
      * Gets the arguments for the callback
      * @return array
      */
     protected function getArguments() {
-    	$arguments = $this->getReflectionHelper()->getArguments($this->callback);
-    	$routeArguments = $this->route->getArguments();
-    	$routePredefinedArguments = $this->route->getPredefinedArguments();
+        $arguments = array();
 
-    	// parse the route arguments in the method signature
-    	foreach ($arguments as $name => $argument) {
-    		if (isset($routeArguments[$name])) {
-    			$arguments[$name] = urldecode($routeArguments[$name]);
+        $routePredefinedArguments = $this->route->getPredefinedArguments();
+        foreach ($routePredefinedArguments as $name => $value) {
+            $arguments[$name] = $value;
+        }
 
-    			unset($routeArguments[$name]);
-    		} elseif (isset($routePredefinedArguments[$name])) {
-    			$arguments[$name] = $routePredefinedArguments[$name];
+        $routeArguments = $this->route->getArguments();
+        foreach ($routeArguments as $name => $value) {
+            $arguments[$name] = urldecode($value);
+        }
 
-    			unset($routePredefinedArguments[$name]);
-    		} else {
-    			$arguments[$name] = $this->getArgumentValue($argument);
-    		}
-    	}
-
-    	// validate remaining arguments
-    	if ($routeArguments || $routePredefinedArguments) {
-    		if ($this->route->isDynamic()) {
-    			// add dynamic arguments
-	    		foreach ($routePredefinedArguments as $name => $value) {
-	    			$arguments[$name] = $value;
-	    		}
-	    		foreach ($routeArguments as $name => $value) {
-	    			$arguments[$name] = $value;
-	    		}
-    		} else {
-    			// invalid arguments provided
-	    		$arguments = array();
-	    		foreach ($routeArguments as $name => $null) {
-	    			$arguments[$name] = true;
-	    		}
-	    		foreach ($routePredefinedArguments as $name => $null) {
-	    			$arguments[$name] = true;
-	    		}
-
-	    		throw new MvcException('Could not dispatch action of route ' . $this->route->getId() . ': arguments (' . implode(', ', array_keys($arguments)) . ') provided which are not part of the callback signature');
-    		}
-    	}
-
-    	return $arguments;
-    }
-
-    /**
-     * Gets the value for the provided argument
-     * @param ReflectionParameter $argument
-     * @return mixed
-     * @throws pallo\library\mvc\exception\MvcException when the argument could
-     * not be retrieved
-     */
-    protected function getArgumentValue(ReflectionParameter $argument) {
-    	if (!$argument->isDefaultValueAvailable()) {
-    		throw new MvcException('Could not dispatch action of route ' . $this->route->getId() . ': argument ' . $argument->getName() . ' is required');
-    	}
-
-    	return $argument->getDefaultValue();
+        return $arguments;
     }
 
     /**
@@ -202,24 +146,16 @@ class GenericDispatcher implements Dispatcher {
      * @return null
      */
     protected function prepareCallback() {
-    	$class = $this->callback->getClass();
-    	if (!$class || !$class instanceof Controller) {
-    		// callback is a function or a method on a non Controller instance
-    		return;
-    	}
+        $class = $this->callback->getClass();
+        if (!$class || !$class instanceof Controller) {
+            // callback is a function or a method on a non Controller instance
+            return;
+        }
 
-    	$this->isController = true;
+        $this->isController = true;
 
         $class->setRequest($this->request);
         $class->setResponse($this->response);
-    }
-
-    /**
-     * Hook straight before invoking the controller
-     * @return null
-     */
-    protected function preInvokeCallback() {
-
     }
 
     /**
@@ -227,28 +163,23 @@ class GenericDispatcher implements Dispatcher {
      * @return mixed Return value of the callback
      */
     protected function invokeCallback() {
-    	if (!$this->isController) {
-    		return $this->callback->invokeWithArrayArguments($this->arguments);
-    	}
+        try {
+            if (!$this->isController) {
+                return $this->invoker->invoke($this->callback, $this->arguments, $this->route->isDynamic());
+            }
 
-    	$returnValue = null;
 
-        $controller = $this->callback->getClass();
-        if ($controller->preAction()) {
-            $returnValue = $this->callback->invokeWithArrayArguments($this->arguments);
+            $controller = $this->callback->getClass();
+            if ($controller->preAction()) {
+                $returnValue = $this->invoker->invoke($this->callback, $this->arguments, $this->route->isDynamic());
 
-            $controller->postAction();
+                $controller->postAction();
+            }
+
+            return $returnValue;
+        } catch (Exception $exception) {
+            throw new MvcException('Could not dispatch action of route ' . $this->route->getId() . ': ' . $this->callback . ' could not be invoked', 0, $exception);
         }
-
-        return $returnValue;
-    }
-
-    /**
-     * Hook straight after invoking the callback
-     * @return null
-     */
-    protected function postInvokeCallback() {
-
     }
 
 }

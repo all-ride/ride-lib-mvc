@@ -14,11 +14,10 @@ class GenericDispatcherTest extends PHPUnit_Framework_TestCase {
     private $dispatcher;
 
     protected function setUp() {
-        $this->dispatcher = new GenericDispatcher();
+        $this->dispatcher = new GenericDispatcher(new ReflectionHelper());
     }
 
     public function testDispatch() {
-    	$this->dispatcher->setReflectionHelper(new ReflectionHelper());
         $actionName = 'testAction';
         $path = '/test';
 
@@ -47,10 +46,10 @@ class GenericDispatcherTest extends PHPUnit_Framework_TestCase {
     public function testDispatchWithArguments() {
         $route = new Route('/path/%id%', array($this, 'actionTest'));
         $route->setPredefinedArguments(array(
-        	'action' => 'content',
+            'action' => 'content',
         ));
         $route->setArguments(array(
-        	'id' => 7,
+            'id' => 7,
         ));
 
         $request = new Request('/path/content/7');
@@ -65,17 +64,17 @@ class GenericDispatcherTest extends PHPUnit_Framework_TestCase {
     public function testDispatchWithDynamicArguments() {
         $route = new Route('/path/%id%', array($this, 'actionTest'));
         $route->setPredefinedArguments(array(
-        	'action' => 'content',
-        	'foo' => 'bar',
+            'action' => 'content',
+            'foo' => 'bar',
         ));
         $route->setArguments(array(
-        	'id' => '7',
-        	'10',
-        	'2',
+            'id' => '7',
+            '10',
+            '2',
         ));
         $route->setIsDynamic(true);
 
-        $request = new Request('/path/content/7/10/2');
+        $request = new Request('/path/7/content/10/2');
         $request->setRoute($route);
         $response = new Response();
 
@@ -101,12 +100,12 @@ class GenericDispatcherTest extends PHPUnit_Framework_TestCase {
     }
 
     public function providerDispatchWithArgumentsThrowsExceptionWhenInvalidArgumentsProvided() {
-    	return array(
-    		array(array(), array()),
-    		array(array('action' => 'content', 'var' => 'value'), array()),
-    		array(array('action' => 'content'), array('var' => 'value')),
-    		array(array('action' => 'content', 'var' => 'value'), array('var2' => 'value')),
-    	);
+        return array(
+            array(array(), array()),
+            array(array('action' => 'content', 'var' => 'value'), array()),
+            array(array('action' => 'content'), array('var' => 'value')),
+            array(array('action' => 'content', 'var' => 'value'), array('var2' => 'value')),
+        );
     }
 
     /**
@@ -124,16 +123,16 @@ class GenericDispatcherTest extends PHPUnit_Framework_TestCase {
     }
 
     public function providerDispatchThrowsExceptionWhenInvalidCallbackProvided() {
-    	return array(
-    		array($this),
-    		array(array($this, 'unexistantMethod')),
-    	);
+        return array(
+            array($this),
+            array(array($this, 'unexistantMethod')),
+        );
     }
 
     public function actionTest($action, $id = null, $option = 1) {
-    	$arguments = func_get_args();
+        $arguments = func_get_args();
 
-    	return 'action-' . implode('-', $arguments);
+        return 'action-' . implode('-', $arguments);
     }
 
 }

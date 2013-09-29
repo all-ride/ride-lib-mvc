@@ -2,7 +2,7 @@
     "name": "pallo/lib-mvc",
     "description": "MVC library of the Pallo framework",
     "license": "MIT",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "authors": [
         {
             "name": "Joris Vandeweerd",
@@ -10,9 +10,9 @@
         }
     ],
     "require": {
-        "pallo/lib-http": "*",
-        "pallo/lib-reflection": "*",
-        "pallo/lib-router": "*"
+        "pallo/lib-http": ">=0.2.0",
+        "pallo/lib-reflection": ">=0.3.0",
+        "pallo/lib-router": ">=0.1.1"
     }, 
     "autoload": {
         "psr-0": {
