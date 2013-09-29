@@ -39,9 +39,9 @@ class Request extends HttpRequest {
      * @param pallo\library\router\Route $route
      * @return null
      */
-	public function setRoute(Route $route) {
-		$this->route = $route;
-	}
+    public function setRoute(Route $route) {
+        $this->route = $route;
+    }
 
     /**
      * Gets the selected route
@@ -58,49 +58,53 @@ class Request extends HttpRequest {
      * is provided
      */
     protected function setPath($path) {
-    	parent::setPath($path);
+        parent::setPath($path);
 
-	    $positionPhp = strpos($path, 'index.php');
-	    if ($positionPhp !== false) {
-	    	// a php script in the request
-	    	$positionParent = strrpos(substr($path, 0, $positionPhp), '/');
-	    	if ($positionParent !== false) {
-	    		$baseUrl = substr($path, 0, $positionParent);
-	    	}
+        $positionPhp = strpos($path, 'index.php');
+        if ($positionPhp !== false) {
+            // a php script in the request
+            $positionParent = strrpos(substr($path, 0, $positionPhp), '/');
+            if ($positionParent !== false) {
+                $baseUrl = substr($path, 0, $positionParent);
+            }
 
-	    	$baseScript = substr($path, 0, $positionPhp + 9);
-	    } elseif (isset($_SERVER['SCRIPT_NAME'])) {
-	    	// no php script in the request
-	    	$position = strrpos($_SERVER['SCRIPT_NAME'], '/');
-	    	if ($position !== false) {
-	    		$baseUrl = substr($_SERVER['SCRIPT_NAME'], 0, $position);
-	    		$baseScript = $baseUrl;
-	    	} else {
-	    		// cli
-	    		$baseUrl = '/';
-	    		$baseScript = null;
-	    	}
-	    } else {
-    		$baseUrl = '/';
-    		$baseScript = null;
-	    }
+            $baseScript = substr($path, 0, $positionPhp + 9);
+        } elseif (isset($_SERVER['SCRIPT_NAME'])) {
+            // no php script in the request
+            $position = strrpos($_SERVER['SCRIPT_NAME'], '/');
+            if ($position !== false) {
+                $baseUrl = substr($_SERVER['SCRIPT_NAME'], 0, $position);
+                $baseScript = $baseUrl;
+            } else {
+                // cli
+                $baseUrl = '/';
+                $baseScript = null;
+            }
+        } else {
+            $baseUrl = '/';
+            $baseScript = null;
+        }
 
-	    $server = $this->getServerUrl();
+        $server = $this->getServerUrl();
 
-	    $this->baseUrl = rtrim($server . $baseUrl, '/');
-	    $this->baseScript = rtrim($server . $baseScript, '/');
-	    $this->basePath = rtrim(str_replace($this->baseUrl, '', str_replace($this->baseScript, '', $server . $path)), '/');
-	    if (!$this->basePath) {
-	    	$this->basePath = '/';
-	    }
+        $this->baseUrl = rtrim($server . $baseUrl, '/');
+        $this->baseScript = rtrim($server . $baseScript, '/');
+        $this->basePath = rtrim(str_replace($this->baseUrl, '', str_replace($this->baseScript, '', $server . $path)), '/');
+        if (!$this->basePath) {
+            $this->basePath = '/';
+        }
     }
 
     /**
      * Gets the path on the running script
      * @return string
      */
-    public function getBasePath() {
-    	return $this->basePath;
+    public function getBasePath($removeQueryString = false) {
+        if ($removeQueryString && $this->query) {
+            return substr($this->basePath, 0, strlen($this->query) * -1);
+        }
+
+        return $this->basePath;
     }
 
     /**
@@ -108,7 +112,7 @@ class Request extends HttpRequest {
      * @return string
      */
     public function getBaseScript() {
-    	return $this->baseScript;
+        return $this->baseScript;
     }
 
     /**
@@ -116,7 +120,7 @@ class Request extends HttpRequest {
      * @return string
      */
     public function getBaseUrl() {
-    	return $this->baseUrl;
+        return $this->baseUrl;
     }
 
 }

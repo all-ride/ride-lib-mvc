@@ -4,18 +4,62 @@ namespace pallo\library\mvc;
 
 use pallo\library\http\Request as HttpRequest;
 use pallo\library\http\Response as HttpResponse;
+use pallo\library\mvc\message\MessageContainer;
+use pallo\library\mvc\message\Message;
 use pallo\library\mvc\view\View;
 
 /**
- * A extension of the HTTP request with view
+ * An extended HTTP request with messages and a view
  */
 class Response extends HttpResponse {
 
     /**
-     * The view for this response
-     * @var pallo\core\view\View
+     * Container for notification messages
+     * @var pallo\library\mvc\message\MessageContainer
+     */
+    protected $messageContainer;
+
+    /**
+     * View for this response
+     * @var pallo\library\mvc\view\View
      */
     protected $view;
+
+    /**
+     * Constructs a new response
+     * @return null
+     */
+    public function __construct() {
+        parent::__construct();
+
+        $this->messageContainer = new MessageContainer();
+        $this->view = null;
+    }
+
+    /**
+     * Add a message to the response
+     * @param pallo\library\mvc\message\Message $message Message to add
+     * @return null
+     */
+    public function addMessage(Message $message) {
+        $this->messageContainer->add($message);
+    }
+
+    /**
+     * Checks if there are messages added to the response
+     * @return boolean
+     */
+    public function hasMessages() {
+        return $this->messageContainer->hasMessages();
+    }
+
+    /**
+     * Gets the message container
+     * @return pallo\library\mvc\message\MessageContainer
+     */
+    public function getMessageContainer() {
+        return $this->messageContainer;
+    }
 
     /**
      * Sets the view of this response. A view will override the body when
@@ -28,9 +72,9 @@ class Response extends HttpResponse {
     }
 
     /**
-	 * Returns the view of this response.
-	 * @return pallo\core\view\View The view
-	 */
+     * Returns the view of this response.
+     * @return pallo\core\view\View The view
+     */
     public function getView() {
         return $this->view;
     }
@@ -53,9 +97,9 @@ class Response extends HttpResponse {
      * @return null
      */
     public function setNotModified() {
-    	parent::setNotModified();
+        parent::setNotModified();
 
-    	$this->setView(null);
+        $this->setView(null);
     }
 
     /**
