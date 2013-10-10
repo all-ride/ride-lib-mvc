@@ -2,10 +2,13 @@
 
 namespace pallo\library\mvc\message;
 
+use \Countable;
+use \Iterator;
+
 /**
  * Container of Message objects
  */
-class MessageContainer implements \Iterator, \Countable {
+class MessageContainer implements Iterator, Countable {
 
     /**
      * Array containing Message objects
