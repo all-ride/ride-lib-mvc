@@ -1,6 +1,6 @@
 {
-    "name": "pallo/lib-mvc",
-    "description": "MVC library of the Pallo framework",
+    "name": "ride/lib-mvc",
+    "description": "MVC library of the Ride framework",
     "license": "MIT",
     "version": "0.2.1",
     "authors": [
@@ -10,13 +10,13 @@
         }
     ],
     "require": {
-        "pallo/lib-http": ">=0.2.0",
-        "pallo/lib-reflection": ">=0.3.0",
-        "pallo/lib-router": ">=0.1.1"
+        "ride/lib-http": ">=0.2.0",
+        "ride/lib-reflection": ">=0.3.0",
+        "ride/lib-router": ">=0.1.1"
     }, 
     "autoload": {
         "psr-0": {
-            "pallo\\library\\mvc\\": ["src/", "test/src/"]
+            "ride\\library\\mvc\\": ["src/", "test/src/"]
         }
     }
 }
