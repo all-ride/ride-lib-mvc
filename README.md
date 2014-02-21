@@ -1,6 +1,6 @@
-# Pallo: MVC Library
+# Ride: MVC Library
 
-Model-View-Controller library of the PHP Pallo framework.
+Model-View-Controller library of the PHP Ride framework.
 
 ## Code Sample
 
@@ -8,13 +8,13 @@ Check this code sample to see some possibilities of this library:
 
     <?php
     
-    use pallo\library\http\Header;
-    use pallo\library\http\HttpFactory;
-    use pallo\library\http\Response;
-    use pallo\library\mvc\dispatcher\GenericDispatcher;
-    use pallo\library\router\GenericRouter;
-    use pallo\library\router\RouteContainer;
-    use pallo\library\router\Route;
+    use ride\library\http\Header;
+    use ride\library\http\HttpFactory;
+    use ride\library\http\Response;
+    use ride\library\mvc\dispatcher\GenericDispatcher;
+    use ride\library\router\GenericRouter;
+    use ride\library\router\RouteContainer;
+    use ride\library\router\Route;
     
     // prepare some routes
     $route = new Route('/', 'testAction');
@@ -25,8 +25,8 @@ Check this code sample to see some possibilities of this library:
     
     // get the request and response
     $httpFactory = new HttpFactory();
-    $httpFactory->setRequestClass('pallo\\library\\mvc\\Request');
-    $httpFactory->setResponseClass('pallo\\library\\mvc\\Response');
+    $httpFactory->setRequestClass('ride\\library\\mvc\\Request');
+    $httpFactory->setResponseClass('ride\\library\\mvc\\Response');
     
     $request = $httpFactory->createRequestFromServer();
     $response = $httpFactory->createResponse();
