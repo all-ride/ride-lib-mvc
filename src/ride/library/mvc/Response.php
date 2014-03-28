@@ -26,6 +26,13 @@ class Response extends HttpResponse {
     protected $view;
 
     /**
+     * Flag to see if the output buffer should be cleared when sending the
+     * response
+     * @var boolean
+     */
+    protected $clearOutputBuffer;
+
+    /**
      * Constructs a new response
      * @return null
      */
@@ -34,6 +41,7 @@ class Response extends HttpResponse {
 
         $this->messageContainer = new MessageContainer();
         $this->view = null;
+        $this->clearOutputBuffer = true;
     }
 
     /**
@@ -103,6 +111,23 @@ class Response extends HttpResponse {
     }
 
     /**
+     * Sets whether the output buffer will be cleared when sending the response
+     * @param boolean $clearOutputBuffer
+     * @return null
+     */
+    public function setClearOutputBuffer($clearOutputBuffer) {
+        $this->clearOutputBuffer = $clearOutputBuffer;
+    }
+
+    /**
+     * Gets whether the output buffer will be cleared when sending the response
+     * @return boolean
+     */
+    public function willClearOutputBuffer() {
+        return $this->clearOutputBuffer;
+    }
+
+    /**
      * Sends the response to the client
      * @param ride\library\http\Request $request The request to respond to
      * @return null
@@ -112,6 +137,10 @@ class Response extends HttpResponse {
 
         if ($this->willRedirect()) {
             return;
+        }
+
+        if ($this->clearOutputBuffer) {
+            while (@ob_end_flush());
         }
 
         if ($this->view) {
