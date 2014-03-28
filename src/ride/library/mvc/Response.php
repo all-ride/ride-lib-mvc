@@ -15,13 +15,13 @@ class Response extends HttpResponse {
 
     /**
      * Container for notification messages
-     * @var ride\library\mvc\message\MessageContainer
+     * @var \ride\library\mvc\message\MessageContainer
      */
     protected $messageContainer;
 
     /**
      * View for this response
-     * @var ride\library\mvc\view\View
+     * @var \ride\library\mvc\view\View
      */
     protected $view;
 
@@ -38,7 +38,7 @@ class Response extends HttpResponse {
 
     /**
      * Add a message to the response
-     * @param ride\library\mvc\message\Message $message Message to add
+     * @param \ride\library\mvc\message\Message $message Message to add
      * @return null
      */
     public function addMessage(Message $message) {
@@ -55,7 +55,7 @@ class Response extends HttpResponse {
 
     /**
      * Gets the message container
-     * @return ride\library\mvc\message\MessageContainer
+     * @return \ride\library\mvc\message\MessageContainer
      */
     public function getMessageContainer() {
         return $this->messageContainer;
@@ -64,7 +64,7 @@ class Response extends HttpResponse {
     /**
      * Sets the view of this response. A view will override the body when
      * sending the response
-     * @param ride\core\view\View $view The view
+     * @param \ride\library\mvc\view\View $view The view
      * @return null
      */
     public function setView(View $view = null) {
@@ -73,7 +73,7 @@ class Response extends HttpResponse {
 
     /**
      * Returns the view of this response.
-     * @return ride\core\view\View The view
+     * @return \ride\library\mvc\view\View The view
      */
     public function getView() {
         return $this->view;
@@ -104,7 +104,7 @@ class Response extends HttpResponse {
 
     /**
      * Sends the response to the client
-     * @param ride\library\http\Request $request The request to respond to
+     * @param \ride\library\http\Request $request The request to respond to
      * @return null
      */
     public function send(HttpRequest $request) {

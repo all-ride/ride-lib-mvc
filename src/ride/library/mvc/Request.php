@@ -12,7 +12,7 @@ class Request extends HttpRequest {
 
     /**
      * Route of this request
-     * @var ride\library\router\Route
+     * @var \ride\library\router\Route
      */
     protected $route;
 
@@ -36,7 +36,7 @@ class Request extends HttpRequest {
 
     /**
      * Sets the selected route
-     * @param ride\library\router\Route $route
+     * @param \ride\library\router\Route $route
      * @return null
      */
     public function setRoute(Route $route) {
@@ -45,7 +45,7 @@ class Request extends HttpRequest {
 
     /**
      * Gets the selected route
-     * @return ride\library\router\Route
+     * @return \ride\library\router\Route
      */
     public function getRoute() {
         return $this->route;
@@ -54,7 +54,7 @@ class Request extends HttpRequest {
     /**
      * Sets the requested path
      * @param string $path The requested path
-     * @throws ride\library\http\exception\HttpException when an invalid path
+     * @throws \ride\library\http\exception\HttpException when an invalid path
      * is provided
      */
     protected function setPath($path) {

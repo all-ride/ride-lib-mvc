@@ -12,8 +12,8 @@ interface Dispatcher {
 
     /**
      * Dispatches a request to the callback
-     * @param ride\library\mvc\Request $request Request to dispatch
-     * @param ride\library\mvc\Response $response Response to dispatch the
+     * @param \ride\library\mvc\Request $request Request to dispatch
+     * @param \ride\library\mvc\Response $response Response to dispatch the
      * request to
      * @return mixed Return value of the action
      */
