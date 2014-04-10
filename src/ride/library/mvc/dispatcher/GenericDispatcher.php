@@ -8,10 +8,8 @@ use ride\library\mvc\Request;
 use ride\library\mvc\Response;
 use ride\library\reflection\Callback;
 use ride\library\reflection\Invoker;
-use ride\library\router\Route;
 
 use \Exception;
-use \ReflectionParameter;
 
 /**
  * Generic dispatcher for request objects
@@ -20,7 +18,7 @@ class GenericDispatcher implements Dispatcher {
 
     /**
      * Instance of the invoker
-     * @var ride\library\reflection\Invoker;
+     * @var \ride\library\reflection\Invoker;
      */
     protected $invoker;
 
@@ -32,19 +30,19 @@ class GenericDispatcher implements Dispatcher {
 
     /**
      * Request for the dispatch
-     * @var ride\library\mvc\Request
+     * @var \ride\library\mvc\Request
      */
     protected $request;
 
     /**
      * Response of the dispatch
-     * @var ride\library\mvc\Response
+     * @var \ride\library\mvc\Response
      */
     protected $response;
 
     /**
      * Route from the request
-     * @var ride\library\router\Route
+     * @var \ride\library\router\Route
      */
     protected $route;
 
@@ -61,8 +59,8 @@ class GenericDispatcher implements Dispatcher {
 
     /**
      * Dispatches a request to the action of a controller
-     * @param ride\library\mvc\Request $request The request to dispatch
-     * @param ride\library\mvc\Response $response The response to dispatch the request to
+     * @param \ride\library\mvc\Request $request The request to dispatch
+     * @param \ride\library\mvc\Response $response The response to dispatch the request to
      * @return mixed The return value of the action
      * @throws Exception when the action is not invokable
      */
@@ -90,8 +88,8 @@ class GenericDispatcher implements Dispatcher {
 
     /**
      * Gets the callback from the route
-     * @return ride\library\Callback
-     * @throws ride\library\mvc\exception\MvcException when the callback in
+     * @return \ride\library\Callback
+     * @throws \ride\library\mvc\exception\MvcException when the callback in
      * the route is invalid
      */
     protected function getCallback() {
