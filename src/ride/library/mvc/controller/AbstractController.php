@@ -32,12 +32,28 @@ class AbstractController implements Controller {
     }
 
     /**
+     * Gets the request from this controller
+     * @return \ride\library\mvc\Request
+     */
+    public function getRequest() {
+        return $this->request;
+    }
+
+    /**
      * Sets the response for this controller
      * @param ride\library\mvc\Response $response The response
      * @return null
      */
     public function setResponse(Response $response) {
         $this->response = $response;
+    }
+
+    /**
+     * Gets the response from this controller
+     * @return \ride\library\mvc\Response
+     */
+    public function getResponse() {
+        return $this->response;
     }
 
     /**
