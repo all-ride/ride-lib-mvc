@@ -12,14 +12,14 @@ interface Controller {
 
     /**
      * Sets the request for this controller
-     * @param ride\library\mvc\Request $request The request
+     * @param \ride\library\mvc\Request $request The request
      * @return null
      */
     public function setRequest(Request $request);
 
     /**
      * Sets the response for this controller
-     * @param ride\library\mvc\Response $response The response
+     * @param \ride\library\mvc\Response $response The response
      * @return null
      */
     public function setResponse(Response $response);

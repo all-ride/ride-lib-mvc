@@ -60,7 +60,7 @@ class Message {
      * Sets the message
      * @param string $message
      * @return null
-     * @throws ride\library\mvc\exception\MvcException when the provided
+     * @throws \ride\library\mvc\exception\MvcException when the provided
      * message is empty or invalid
      */
     public function setMessage($message) {
@@ -83,7 +83,7 @@ class Message {
      * Set the type of this message
      * @param string $type
      * @return null
-     * @throws ride\library\mvc\exception\MvcException when the provided
+     * @throws \ride\library\mvc\exception\MvcException when the provided
      * message is null or not a string
      */
     public function setType($type = null) {

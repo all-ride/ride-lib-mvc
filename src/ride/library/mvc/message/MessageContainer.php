@@ -33,7 +33,7 @@ class MessageContainer implements Iterator, Countable {
 
     /**
      * Merge another container into this container
-     * @param ride\library\mvc\message\MessageContainer $messages Message
+     * @param \ride\library\mvc\message\MessageContainer $messages Message
      * container to merge with
      * @return null
      */
