@@ -108,6 +108,15 @@ class Request extends HttpRequest {
     }
 
     /**
+     * Override the base script of the request
+     * @param string $baseScript
+     * @return null
+     */
+    public function setBaseScript($baseScipt) {
+        $this->baseScript = $baseScipt;
+    }
+
+    /**
      * Gets the base URL to the running script
      * @return string
      */
