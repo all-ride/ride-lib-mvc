@@ -8,7 +8,7 @@ use ride\library\mvc\Response;
 /**
  * Abstract implementation of a controller
  */
-class AbstractController implements Controller {
+abstract class AbstractController implements Controller {
 
     /**
      * The request for this controller
