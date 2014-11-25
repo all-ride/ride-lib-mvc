@@ -93,6 +93,14 @@ class MessageContainer implements Iterator, Countable {
     }
 
     /**
+     * Removes all messages from the list
+     * @return null
+     */
+    public function removeAll() {
+        $this->messages = array();
+    }
+
+    /**
      * Implementation of the rewind() method of the {@link Iterator Iterator interface}
      * @return null
      */
