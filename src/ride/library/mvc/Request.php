@@ -72,7 +72,7 @@ class Request extends HttpRequest {
         } elseif (isset($_SERVER['SCRIPT_NAME'])) {
             // no php script in the request
             $position = strrpos($_SERVER['SCRIPT_NAME'], '/');
-            if ($position !== false) {
+            if ($position !== false && !isset($_SERVER['SHELL'])) {
                 $baseUrl = substr($_SERVER['SCRIPT_NAME'], 0, $position);
                 $baseScript = $baseUrl;
             } else {
