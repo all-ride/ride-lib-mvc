@@ -8,6 +8,13 @@ namespace ride\library\mvc\view;
 interface HtmlView extends View {
 
     /**
+     * Merges the javascripts and styles of the provided view into this view
+     * @param HtmlView $view
+     * @return null
+     */
+    public function mergeResources(HtmlView $view);
+
+    /**
      * Adds a javascript file to this view
      * @param string $file Reference to a javascript file. This can be a
      * absolute URL or relative URL to the base URL
@@ -67,7 +74,7 @@ interface HtmlView extends View {
     /**
      * Removes a stylesheet file from this view
      * @param string $file Reference to the css file
-     * @return null
+     * @return boolean True if the style is found and removed, false otherwise
      * @see addStyle
      */
     public function removeStyle($file);
