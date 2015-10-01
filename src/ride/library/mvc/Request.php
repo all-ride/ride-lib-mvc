@@ -100,8 +100,11 @@ class Request extends HttpRequest {
      * @return string
      */
     public function getBasePath($removeQueryString = false) {
-        if ($removeQueryString && $this->query) {
-            return substr($this->basePath, 0, strlen($this->query) * -1);
+        if ($removeQueryString) {
+            $positionQuestionMark = strpos($this->basePath, '?');
+            if ($positionQuestionMark) {
+                return substr($this->basePath, 0, $positionQuestionMark);
+            }
         }
 
         return $this->basePath;
