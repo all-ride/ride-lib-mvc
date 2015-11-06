@@ -52,7 +52,7 @@ class Request extends HttpRequest {
     }
 
     /**
-     * Sets the requested path
+     * Sets the requested path and detects base URL, script and path
      * @param string $path The requested path
      * @throws \ride\library\http\exception\HttpException when an invalid path
      * is provided
@@ -60,29 +60,39 @@ class Request extends HttpRequest {
     protected function setPath($path) {
         parent::setPath($path);
 
-        $positionPhp = strpos($path, 'index.php');
-        if ($positionPhp !== false) {
-            // a php script in the request
-            $positionParent = strrpos(substr($path, 0, $positionPhp), '/');
-            if ($positionParent !== false) {
-                $baseUrl = substr($path, 0, $positionParent);
-            }
+        $baseUrl = '/';
+        $baseScript = null;
 
-            $baseScript = substr($path, 0, $positionPhp + 9);
-        } elseif (isset($_SERVER['SCRIPT_NAME'])) {
-            // no php script in the request
+        if (isset($_SERVER['SCRIPT_NAME']) && !isset($_SERVER['SHELL'])) {
             $position = strrpos($_SERVER['SCRIPT_NAME'], '/');
-            if ($position !== false && !isset($_SERVER['SHELL'])) {
-                $baseUrl = substr($_SERVER['SCRIPT_NAME'], 0, $position);
-                $baseScript = $baseUrl;
-            } else {
-                // cli
-                $baseUrl = '/';
-                $baseScript = null;
+            if ($position !== false) {
+                if (strpos($path, $_SERVER['SCRIPT_NAME']) === 0) {
+                    // script is literally accessed without rewrite
+                    $baseUrl = substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
+                    $baseScript = $_SERVER['SCRIPT_NAME'];
+                } else {
+                    // path is rewritten, detect script
+                    $positionIndex = strpos($_SERVER['SCRIPT_NAME'], '/index.php');
+                    if ($positionIndex !== 0) {
+                        $baseUrl = substr($_SERVER['SCRIPT_NAME'], 0, $positionIndex);
+                    } else {
+                        $baseUrl = substr($_SERVER['SCRIPT_NAME'], 0, $position);
+                    }
+
+                    $baseScript = $baseUrl;
+                }
             }
-        } else {
-            $baseUrl = '/';
-            $baseScript = null;
+        } elseif (!isset($_SERVER['SCRIPT_NAME'])) {
+            $positionPhp = strpos($path, 'index.php');
+            if ($positionPhp !== false) {
+                // a php script in the request path
+                $positionParent = strrpos(substr($path, 0, $positionPhp), '/');
+                if ($positionParent !== false) {
+                    $baseUrl = substr($path, 0, $positionParent);
+                }
+
+                $baseScript = substr($path, 0, $positionPhp + 9);
+            }
         }
 
         $server = $this->getServerUrl();
