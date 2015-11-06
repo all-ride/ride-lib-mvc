@@ -20,6 +20,13 @@ class RequestTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testPath() {
+        if (isset($_SERVER['SHELL'])) {
+            unset($_SERVER['SHELL']);
+        }
+        if (isset($_SERVER['SCRIPT_NAME'])) {
+            unset($_SERVER['SCRIPT_NAME']);
+        }
+
         $request = new Request('/path/index.php/foo/bar');
 
         $this->assertEquals('/foo/bar', $request->getBasePath());
@@ -40,6 +47,7 @@ class RequestTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('http://localhost/path', $request->getBaseUrl());
 
         $_SERVER['SCRIPT_NAME'] = 'console.php';
+        $_SERVER['SHELL'] = 'shell';
         $request = new Request('/path/foo/bar?test=value');
 
         $this->assertEquals('/path/foo/bar?test=value', $request->getBasePath());

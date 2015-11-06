@@ -52,6 +52,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase {
         $this->response->setView($view);
         $this->response->setBody('body');
         $this->response->removeHeader(Header::HEADER_DATE);
+        $this->response->setClearOutputBuffer(false);
 
         $request = new Request('/');
 
