@@ -22,7 +22,7 @@ $route = new Route('/', 'testAction');
 $route->setIsDynamic(true);
 
 $routeContainer = new RouteContainer();
-$routeContainer->addRoute($route);
+$routeContainer->setRoute($route);
 
 // get the request and response
 $httpFactory = new HttpFactory();
