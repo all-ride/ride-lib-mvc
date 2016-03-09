@@ -51,13 +51,12 @@ abstract class AbstractHtmlView implements HtmlView {
      * Adds a javascript file to this view
      * @param string $file Reference to a javascript file. This can be a
      * absolute URL or relative URL to the base URL
-     * @param boolean $prepend Optional, prepend the script to execute
-     * it before any other scripts (defaults to `false`)
+     * @param boolean $prepend Set to true to prepend the script
      * @return null
      */
     public function addJavascript($file, $prepend = false) {
         if ($prepend) {
-            $this->javascripts = array_merge(array($file => true), $this->javascripts);
+            $this->javascripts = array($file => true) + $this->javascripts;
         } else {
             $this->javascripts[$file] = true;
         }
@@ -91,10 +90,15 @@ abstract class AbstractHtmlView implements HtmlView {
     /**
      * Adds a inline javascript to this view
      * @param string $script Javascript code to add
+     * @param boolean $prepend Set to true to prepend the script
      * @return null
      */
-    public function addInlineJavascript($script) {
-        $this->inlineJavascripts[] = $script;
+    public function addInlineJavascript($script, $prepend = false) {
+        if ($prepend) {
+            array_unshift($this->inlineJavascripts, $script);
+        } else {
+            array_push($this->inlineJavascripts, $script);
+        }
     }
 
     /**
@@ -127,10 +131,15 @@ abstract class AbstractHtmlView implements HtmlView {
      * Adds a stylesheet file to this view
      * @param string $file Reference to a CSS file. This can be a absolute URL
      * or a relative URL to the base URL
+     * @param boolean $prepend Set to true to prepend the style
      * @return null
      */
-    public function addStyle($file) {
-        $this->styles[$file] = true;
+    public function addStyle($file, $prepend = false) {
+        if ($prepend) {
+            $this->styles = array($file => true) + $this->styles;
+        } else {
+            $this->styles[$file] = true;
+        }
     }
 
     /**

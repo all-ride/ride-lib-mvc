@@ -18,9 +18,10 @@ interface HtmlView extends View {
      * Adds a javascript file to this view
      * @param string $file Reference to a javascript file. This can be a
      * absolute URL or relative URL to the base URL
+     * @param boolean $prepend Set to true to prepend the script
      * @return null
      */
-    public function addJavascript($file);
+    public function addJavascript($file, $prepend = false);
 
     /**
      * Gets all the javascript files which are added to this view
@@ -39,9 +40,10 @@ interface HtmlView extends View {
     /**
      * Adds a inline javascript to this view
      * @param string $script Javascript code to add
+     * @param boolean $prepend Set to true to prepend the script
      * @return null
      */
-    public function addInlineJavascript($script);
+    public function addInlineJavascript($script, $prepend = false);
 
     /**
      * Gets all the inline javascripts
@@ -61,9 +63,10 @@ interface HtmlView extends View {
      * Adds a stylesheet file to this view
      * @param string $file Reference to a CSS file. This can be a absolute URL
      * or a relative URL to the base URL
+     * @param boolean $prepend Set to true to prepend the style
      * @return null
      */
-    public function addStyle($file);
+    public function addStyle($file, $prepend = false);
 
     /**
      * Gets all the stylesheets which are added to this view
