@@ -51,10 +51,16 @@ abstract class AbstractHtmlView implements HtmlView {
      * Adds a javascript file to this view
      * @param string $file Reference to a javascript file. This can be a
      * absolute URL or relative URL to the base URL
+     * @param boolean $prepend Optional, prepend the script to execute
+     * it before any other scripts (defaults to `false`)
      * @return null
      */
-    public function addJavascript($file) {
-        $this->javascripts[$file] = true;
+    public function addJavascript($file, $prepend = false) {
+        if ($prepend) {
+            $this->javascripts = array_merge(array($file => true), $this->javascripts);
+        } else {
+            $this->javascripts[$file] = true;
+        }
     }
 
     /**
