@@ -2,7 +2,7 @@
 
 Model-View-Controller library of the PHP Ride framework.
 
-It builds on top of the HTTP and routing library to handle input and output.
+It builds on top of the HTTP and routing library to handle input and output. 
 
 ## Request
 
