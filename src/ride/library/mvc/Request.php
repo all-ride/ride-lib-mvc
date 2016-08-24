@@ -2,6 +2,7 @@
 
 namespace ride\library\mvc;
 
+use ride\library\mvc\exception\MvcException;
 use ride\library\http\Request as HttpRequest;
 use ride\library\router\Route;
 
@@ -49,6 +50,20 @@ class Request extends HttpRequest {
      */
     public function getRoute() {
         return $this->route;
+    }
+
+    /**
+     * Gets the URL instance from the route
+     * @return \ride\library\router\Url
+     */
+    public function getRouteUrl() {
+        if (!$this->route) {
+            throw new MvcException('Could not get the URL from the route: no route set');
+        }
+
+        $arguments = $this->route->getPredefinedArguments() + $this->route->getArguments();
+
+        return $this->route->getUrl($this->getBaseScript(), $arguments, $this->getQueryParameters());
     }
 
     /**

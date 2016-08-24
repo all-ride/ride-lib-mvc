@@ -2,7 +2,9 @@
 
 namespace ride\library\mvc;
 
+use ride\library\http\HeaderContainer;
 use ride\library\router\Route;
+use ride\library\router\Url;
 
 use \PHPUnit_Framework_TestCase;
 
@@ -17,6 +19,23 @@ class RequestTest extends PHPUnit_Framework_TestCase {
         $request->setRoute($route);
 
         $this->assertEquals($route, $request->getRoute());
+    }
+
+    public function testGetRouteUrl() {
+        $route = new Route('/path/to/%action%', 'callback');
+        $route->setArguments(array('action' => 'edit'));
+
+        $headers = new HeaderContainer();
+        $headers->setHeader('host', 'www.host.com');
+
+        $request = new Request('/path/to/edit', 'GET', 'HTTP/1.1', $headers);
+        $request->setRoute($route);
+
+        $url = $request->getRouteUrl();
+
+        $this->assertTrue($url instanceof Url);
+        $this->assertEquals('http://www.host.com/path/to/edit', (string) $url);
+        $this->assertEquals('edit', $url->getArgument('action'));
     }
 
     public function testPath() {
