@@ -15,7 +15,12 @@
     },
     "autoload": {
         "psr-0": {
-            "ride\\library\\mvc\\": ["src/", "test/src/"]
+            "ride\\library\\mvc\\": ["src/"]
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "ride\\library\\mvc\\": ["test/src/"]
         }
     }
 }
