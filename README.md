@@ -123,4 +123,3 @@ You can use [Composer](http://getcomposer.org) to install this library.
 ```
 composer require ride/lib-mvc
 ```
-§
