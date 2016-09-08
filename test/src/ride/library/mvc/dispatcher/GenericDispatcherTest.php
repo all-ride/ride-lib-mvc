@@ -24,7 +24,9 @@ class GenericDispatcherTest extends PHPUnit_Framework_TestCase {
         $controllerClass = 'ride\\library\\mvc\\controller\\AbstractController';
         $controllerActions = array($actionName, 'setRequest', 'setResponse', 'preAction', 'postAction');
 
-        $controllerMock = $this->getMock($controllerClass, $controllerActions);
+        $controllerMock = $this->getMockBuilder($controllerClass)
+                               ->setMethods($controllerActions)
+                               ->getMock();
         $controllerMockActionCall = $controllerMock->expects($this->once());
         $controllerMockActionCall->method($actionName);
         $controllerMockActionCall->will($this->returnValue(null));

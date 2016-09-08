@@ -22,7 +22,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase {
     public function testView() {
         $this->assertNull($this->response->getView());
 
-        $view = $this->getMock('ride\\library\\mvc\\view\\View', array('render'));
+        $view = $this->getMockBuilder('ride\\library\\mvc\\view\\View')
+                     ->setMethods(array('render'))
+                     ->getMock();
         $view->expects($this->once())->method('render')->with($this->equalTo(true))->will($this->returnValue('view'));
 
         $this->response->setView($view);
@@ -46,7 +48,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase {
     public function testSend() {
         $this->expectOutputString('body');
 
-        $view = $this->getMock('ride\\library\\mvc\\view\\View', array('render'));
+        $view = $this->getMockBuilder('ride\\library\\mvc\\view\\View')
+                     ->setMethods(array('render'))
+                     ->getMock();
         $view->expects($this->once())->method('render')->with($this->equalTo(false));
 
         $this->response->setView($view);
