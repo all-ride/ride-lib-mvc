@@ -2,19 +2,21 @@
 
 Model-View-Controller library of the PHP Ride framework.
 
-It builds on top of the HTTP and routing library to handle input and output. 
+It builds on top of the HTTP and routing library to handle input and output.
 
-## Request
+## What's In This Library 
+
+### Request
 
 The MVC _Request_ is an extended HTTP request.
 The route is integrated which gives you the possibility to get extra properties from it like the base URL and incoming arguments.
 
-## Response
+### Response
 
 The MVC _Response_ is an extended HTTP response.
 It adds methods to deal with views and messages.
 
-## Controller
+### Controller
 
 A _Controller_ handles the incoming request and translates it into a response.
 The workhorse of a controller is an action.
@@ -24,19 +26,19 @@ The result of this action is set to the response, possibly through a view.
 
 To translate incoming request into actions, the actions must be defined in the routing table.
 
-## Model
+### Model
 
 A model contains the logic of your domain.
 There is no interface for this since it can by anything you want or need.
 It's completly up to you.
 
-## View
+### View
 
 A _View_ is a representation of the result.
 It's a data container of variables which will be rendered when sending the response.
 Different views for the same action can easily implemented like HTML, JSON, XML, ....
 
-## Message
+### Message
 
 The _Message_ is a data container for a single message.
 You can add multiple messages to a response.
@@ -108,3 +110,17 @@ function testAction() {
     $response->setBody('test: ' . var_export(func_get_args(), true));
 }
 ```
+
+### Implementations
+
+For more examples, you can check the following implementation of this library:
+- [ride/web](https://github.com/all-ride/ride-web)
+
+## Installation
+
+You can use [Composer](http://getcomposer.org) to install this library.
+
+```
+composer require ride/lib-mvc
+```
+§
