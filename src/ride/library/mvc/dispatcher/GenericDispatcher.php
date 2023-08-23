@@ -133,7 +133,7 @@ class GenericDispatcher implements Dispatcher {
 
         $routeArguments = $this->route->getArguments();
         foreach ($routeArguments as $name => $value) {
-            $arguments[$name] = urldecode($value);
+            $arguments[$name] = $value ? urldecode($value): null;
         }
 
         return $arguments;
