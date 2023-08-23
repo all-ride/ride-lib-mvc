@@ -104,6 +104,7 @@ class MessageContainer implements Iterator, Countable {
      * Implementation of the rewind() method of the {@link Iterator Iterator interface}
      * @return null
      */
+    #[\ReturnTypeWillChange]
     public function rewind() {
         $this->position = 0;
     }
@@ -112,6 +113,7 @@ class MessageContainer implements Iterator, Countable {
      * Implementation of the current() method of the {@link Iterator Iterator interface}
      * @return Message a message
      */
+    #[\ReturnTypeWillChange]
     public function current() {
         return $this->messages[$this->position];
     }
@@ -120,6 +122,7 @@ class MessageContainer implements Iterator, Countable {
      * Implementation of the key() method of the {@link Iterator Iterator interface}
      * @return int the pointer of the current message
      */
+    #[\ReturnTypeWillChange]
     public function key() {
         return $this->position;
     }
@@ -128,6 +131,7 @@ class MessageContainer implements Iterator, Countable {
      * Implementation of the next() method of the {@link Iterator Iterator interface}
      * @return null
      */
+    #[\ReturnTypeWillChange]
     public function next() {
         $this->position++;
     }
@@ -136,6 +140,7 @@ class MessageContainer implements Iterator, Countable {
      * Implementation of the valid() method of the {@link Iterator Iterator interface}
      * @return true if the current pointer is valid, false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function valid() {
         return isset($this->messages[$this->position]);
     }
@@ -144,6 +149,7 @@ class MessageContainer implements Iterator, Countable {
      * Implementation of the count() method of the {@link Countable Countable interface}
      * @return int number of messages in this container
      */
+    #[\ReturnTypeWillChange]
     public function count() {
         return count($this->messages);
     }
