@@ -2,6 +2,7 @@
 
 namespace ride\library\mvc;
 
+use AllowDynamicProperties;
 use ride\library\http\Request as HttpRequest;
 use ride\library\http\Response as HttpResponse;
 use ride\library\mvc\message\MessageContainer;
@@ -11,6 +12,7 @@ use ride\library\mvc\view\View;
 /**
  * An extended HTTP request with messages and a view
  */
+#[AllowDynamicProperties]
 class Response extends HttpResponse {
 
     /**

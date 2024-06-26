@@ -47,6 +47,13 @@ class GenericDispatcher implements Dispatcher {
     protected $route;
 
     /**
+     * @var \ride\library\Callback|Callback|null
+     */
+    protected $callback;
+
+    protected $arguments;
+
+    /**
      * Constructs a new dispatcher
      * @return null
      */
